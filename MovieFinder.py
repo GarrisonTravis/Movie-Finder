@@ -114,6 +114,30 @@ def get_movie_suggestions(movie_id):
 	for movie in results:
 		print(movie["title"])
 
+
+# Function to get tv id
+def get_tv_id(base_tv):
+	tv_params = {"api_key" : "5ef5cb1f27635cdee648c0217464880f", "language" : "en-US", "query" : base_tv, "page" : "1", "include_adult" : "false"}
+
+	response = requests.get("https://api.themoviedb.org/3/search/tv", tv_params)
+
+	results = response.json()["results"]
+
+	tv_id = results[0]["id"]
+
+	return tv_id
+
+# Function to get tv suggestions
+def get_tv_suggestions(tv_id):
+	sugg_params = {"api_key" : "5ef5cb1f27635cdee648c0217464880f", "language" : "en-US", "page" : "1"}
+
+	response = requests.get("https://api.themoviedb.org/3/tv/{}/similar".format(tv_id), sugg_params)
+
+	results = response.json()["results"]
+
+	for tv in results:
+		print(tv["name"])
+
 def main():
 	print(" 1. Movie Credits")
 	print(" 2. TV Credits")
@@ -150,6 +174,8 @@ def main():
 
 	elif sel == "4":
 		base_tv = input("Enter tv show: ")
+		tv_id = get_tv_id(base_tv)
+		get_tv_suggestions(tv_id)
 
 	else:
 		print("Invalid selection! Try again.\n")
